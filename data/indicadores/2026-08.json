@@ -1,0 +1,32 @@
+{
+  "periodo": "Junio 2026 (Texas Housing Insight, TRERC — reporte de agosto 2026)",
+  "actualizado": "2026-08-18",
+  "fuente_nombre": "Texas Real Estate Research Center (TRERC)",
+  "fuente_url": "https://trerc.tamu.edu/reports/texas-housing-insight-august-2026/",
+  "indicadores": [
+    {
+      "etiqueta": "Precio medio de venta",
+      "valor": "$342,900",
+      "variacion": "−2.0% interanual",
+      "tendencia": "down"
+    },
+    {
+      "etiqueta": "Ventas cerradas",
+      "valor": "34,956",
+      "variacion": "+8.6% interanual",
+      "tendencia": "up"
+    },
+    {
+      "etiqueta": "Inventario activo",
+      "valor": "5.4 meses",
+      "variacion": "vs. 5.6 meses hace un año",
+      "tendencia": "down"
+    },
+    {
+      "etiqueta": "Días en mercado (mediana)",
+      "valor": "62 días",
+      "variacion": "+2 días interanual",
+      "tendencia": "up"
+    }
+  ]
+}
