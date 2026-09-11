@@ -89,20 +89,59 @@ components/
   home/                     SectionGrid, MarketIndicatorsWidget
   notas/                    NotaCard, FiltroBar, FuenteCitation, CTARelacionada
   ui/                       FuenteBadge, Tag
-content/notas/*.mdx         Las notas (contenido editorial)
-data/indicadores.json       Datos del widget de indicadores del home (actualizar a mano)
+content/notas/*.mdx         Las notas publicadas (contenido editorial en vivo)
+content/borradores/*.mdx    Notas generadas por la actualización automática, sin publicar
+data/indicadores/*.json     Historial de indicadores, un archivo por periodo (YYYY-MM.json)
+data/indicadores-borrador/  Snapshots de indicadores pendientes de revisión
 lib/
   taxonomy.ts               Las 6 secciones, ciudades y fuentes — fuente única de verdad
   mdx.ts                    Lectura y filtrado de notas
+  indicadores.ts            Lectura del historial de indicadores
 ```
 
-## 4. Actualizar el widget de indicadores del home
+## 4. El widget de indicadores y su historial
 
-Edita `data/indicadores.json` a mano cada vez que salga un nuevo Texas Housing Insight de
-TRERC (o la fuente que se use). No hay automatización todavía — es deliberado para esta
-fase, ver "Fuera de alcance" abajo.
+Cada corte de datos vive en `data/indicadores/<YYYY-MM>.json` (mismo periodo que cubre el
+reporte, no la fecha en que se revisó). El widget del home y `/indicadores` siempre leen
+**todos** los archivos de esa carpeta y muestran el más reciente arriba — nada se sobreescribe,
+así que el historial completo queda disponible para consulta y comparación mes a mes.
 
-## 5. Fuera de alcance en esta fase (recomendaciones, no implementadas)
+Para agregar un corte nuevo a mano: copia el archivo más reciente, cámbiale el nombre al
+periodo nuevo y actualiza los valores. La actualización automática (sección 5) también puede
+generar estos archivos, pero siempre como borrador en `data/indicadores-borrador/`.
+
+## 5. Actualización automática y flujo de revisión
+
+Tres rutinas programadas (agentes en la nube, ver `https://claude.ai/code/routines`)
+investigan las fuentes autorizadas y generan **borradores** — nunca publican directo:
+
+| Rutina | Cadencia | Fuentes que revisa |
+|---|---|---|
+| Mensual | Día 5 de cada mes | TRERC, Redfin, Realtor.com, Zonda/Metrostudy, HomesUSA.com |
+| Trimestral | 15 de ene/abr/jul/oct | Texas REALTORS®, Yardi Matrix, Newmark |
+| Semanal | Todos los lunes | The Real Deal Texas, Community Impact |
+
+Cada corrida que encuentra algo nuevo y citable:
+1. Escribe la(s) nota(s) en `content/borradores/` (y, si aplica, un snapshot en
+   `data/indicadores-borrador/`) siguiendo la misma plantilla y reglas de citación de la
+   sección 2 — nunca toca `content/notas/` ni `data/indicadores/` directamente.
+2. Crea una rama nueva (`borrador/mensual-...`, `borrador/trimestral-...` o
+   `borrador/semanal-...`), hace commit solo de esos archivos nuevos, y abre un Pull
+   Request hacia `main`.
+3. Si no encuentra nada nuevo, no hace ningún cambio — es normal que muchas semanas no haya
+   nada que publicar.
+
+**Para revisar y publicar un borrador**: abre el Pull Request en GitHub, lee la nota
+completa (verifica que las cifras y la cita coincidan con la fuente real), y si está lista:
+1. Mueve el archivo de `content/borradores/` a `content/notas/` (mismo nombre) — y de
+   `data/indicadores-borrador/` a `data/indicadores/` si aplica — dentro de esa misma rama.
+2. Ajusta lo que haga falta (tono, cifras, `fecha_publicacion`).
+3. Haz merge del PR a `main`. Vercel tiene este repo conectado, así que el merge despliega
+   solo — no hace falta correr `vercel --prod` a mano.
+
+Si un borrador no sirve, simplemente cierra el PR sin mergear (o bórralo).
+
+## 6. Fuera de alcance en esta fase (recomendaciones, no implementadas)
 
 - **CMS / edición vía UI**: hoy publicar una nota requiere editar un archivo `.mdx` y
   hacer commit. Si el volumen editorial crece, vale la pena evaluar un CMS headless
@@ -115,7 +154,8 @@ fase, ver "Fuera de alcance" abajo.
   el sitio necesita búsqueda full-text, comentarios, o analítica editorial más fina,
   ese es el momento de introducir una base de datos — no antes.
 
-## 6. Despliegue
+## 7. Despliegue
 
-Pensado para Vercel: conecta el repo, sin variables de entorno requeridas para esta fase
-(no hay integraciones externas todavía).
+En Vercel, con el repo de GitHub (`oscardsanchez/texas-realty-wire`) conectado — cada push
+a `main` despliega automáticamente. Sin variables de entorno requeridas (no hay
+integraciones externas todavía).
