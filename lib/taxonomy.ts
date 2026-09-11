@@ -20,14 +20,14 @@ export const SECCIONES: Record<SeccionSlug, Seccion> = {
     descripcion:
       "Precios, inventario y días en mercado — la lectura mensual y trimestral de hacia dónde se mueve Texas.",
     fuentePrincipal:
-      "TRERC, Texas REALTORS®, Redfin, Realtor.com, Zonda/Metrostudy, HomesUSA.com, Yardi Matrix, Newmark",
+      "TRERC, Texas REALTORS®, Redfin, Realtor.com, Zonda/Metrostudy, HomesUSA.com, City of Austin Open Data, FRED, Unlock MLS",
   },
   "movimientos-corporativos": {
     slug: "movimientos-corporativos",
     nombre: "Movimientos Corporativos",
     descripcion:
       "Adquisiciones, ejecuciones hipotecarias y desarrollos de lujo que redefinen quién controla el terreno.",
-    fuentePrincipal: "The Real Deal Texas",
+    fuentePrincipal: "The Real Deal Texas, Yardi Matrix, Newmark, Cushman & Wakefield",
   },
   hiperlocal: {
     slug: "hiperlocal",
@@ -160,6 +160,37 @@ export const FUENTES: Record<string, Fuente> = {
     url: "https://www.nmrk.com/insights/market-report/austin-market-reports",
     tipo: "primaria",
     descripcion: "Reportes trimestrales de mercado comercial y multifamiliar.",
+  },
+  "austin-open-data": {
+    slug: "austin-open-data",
+    nombre: "City of Austin Open Data Portal",
+    url: "https://data.austintexas.gov/Building-and-Development/New-Residential-Units-Summary-by-Calendar-Year-and/2y79-8diw",
+    tipo: "primaria",
+    descripcion:
+      "Datos abiertos del gobierno de Austin: permisos de construcción de vivienda nueva unifamiliar y multifamiliar, resúmenes mensuales y anuales.",
+  },
+  "fred-austin": {
+    slug: "fred-austin",
+    nombre: "FRED (Federal Reserve Bank of St. Louis)",
+    url: "https://fred.stlouisfed.org/series/AUST448BPPRIV",
+    tipo: "primaria",
+    descripcion:
+      "Indicador mensual de nuevas estructuras privadas autorizadas por permiso de construcción en el área metro Austin-Round Rock-Georgetown.",
+  },
+  "unlock-mls": {
+    slug: "unlock-mls",
+    nombre: "Unlock MLS (antes ABoR)",
+    url: "https://www.unlockmls.com/stats",
+    tipo: "primaria",
+    descripcion:
+      "Central Texas Housing Report mensual — cierres de venta y precio medio del área metropolitana de Austin, incluyendo constructoras afiliadas.",
+  },
+  "cushman-wakefield": {
+    slug: "cushman-wakefield",
+    nombre: "Cushman & Wakefield",
+    url: "https://www.cushmanwakefield.com/en/united-states/insights/us-marketbeats/austin-marketbeats",
+    tipo: "primaria",
+    descripcion: "Reportes trimestrales MarketBeat de mercado comercial y multifamiliar de Austin.",
   },
 };
 

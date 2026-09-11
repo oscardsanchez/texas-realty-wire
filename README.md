@@ -46,7 +46,8 @@ resumen: "1-2 líneas para las tarjetas de preview del home y el listado."
 
 **Valores válidos de `fuente_principal`**:
 `trerc`, `texas-realtors`, `the-real-deal`, `community-impact`, `redfin`, `realtor-com`,
-`zonda-metrostudy`, `homesusa`, `yardi-matrix`, `newmark`.
+`zonda-metrostudy`, `homesusa`, `yardi-matrix`, `newmark`, `austin-open-data`, `fred-austin`,
+`unlock-mls`, `cushman-wakefield`.
 El sitio usa este valor para mostrar el badge de "dato primario" (verde) o "cobertura
 periodística" (gris) automáticamente — no hay que elegir el color a mano.
 
