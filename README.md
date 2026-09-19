@@ -118,9 +118,19 @@ investigan las fuentes autorizadas y generan **borradores** — nunca publican d
 
 | Rutina | Cadencia | Fuentes que revisa |
 |---|---|---|
-| Mensual | Día 5 de cada mes | TRERC, Redfin, Realtor.com, Zonda/Metrostudy, HomesUSA.com |
-| Trimestral | 15 de ene/abr/jul/oct | Texas REALTORS®, Yardi Matrix, Newmark |
-| Semanal | Todos los lunes | The Real Deal Texas, Community Impact |
+| Mensual | Día 5 de cada mes | TRERC (LMA Austin), Redfin, Realtor.com, Zonda/Metrostudy, HomesUSA.com, City of Austin Open Data, FRED |
+| Trimestral | 15 de ene/abr/jul/oct | Texas REALTORS®, Unlock MLS, Yardi Matrix, Newmark, Cushman & Wakefield |
+| Semanal | Todos los lunes | The Real Deal Texas, Community Impact (sección Austin) |
+
+**Alcance editorial (desde sept. 2026): exclusivo al área metro de Austin** — Austin,
+Round Rock, Cedar Park, Georgetown, Leander, Pflugerville, Kyle, Buda, San Marcos, Hutto,
+Manor, Dripping Springs y alrededores (condados Travis, Williamson y Hays). Las tres
+rutinas están configuradas para descartar historias de Dallas, Houston o San Antonio salvo
+que sean estrictamente necesarias como dato estatal de contexto. Todo lo nuevo se etiqueta
+`ciudad: "austin"` (la taxonomía no distingue suburbio a nivel de campo — el nombre del
+suburbio va en el título/cuerpo de la nota, como en la nota de Texas City/Galveston Bay).
+Las notas y snapshots de indicadores previos a este cambio (de otras ciudades o estatales)
+se quedan publicados tal cual — no se borran ni se re-etiquetan.
 
 Cada corrida que encuentra algo nuevo y citable:
 1. Escribe la(s) nota(s) en `content/borradores/` (y, si aplica, un snapshot en

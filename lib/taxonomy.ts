@@ -112,9 +112,9 @@ export const FUENTES: Record<string, Fuente> = {
   "community-impact": {
     slug: "community-impact",
     nombre: "Community Impact",
-    url: "https://communityimpact.com/real-estate",
+    url: "https://communityimpact.com/austin/real-estate/",
     tipo: "periodistica",
-    descripcion: "Cobertura periodística hiperlocal, comunidad por comunidad.",
+    descripcion: "Cobertura periodística hiperlocal del área metro de Austin, comunidad por comunidad.",
   },
   redfin: {
     slug: "redfin",
