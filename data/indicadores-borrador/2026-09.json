@@ -1,0 +1,26 @@
+{
+  "periodo": "Septiembre 2026 (Unlock MLS Central Texas Housing Report — área metro Austin-Round Rock-San Marcos)",
+  "actualizado": "2026-10-13",
+  "fuente_nombre": "Unlock MLS (antes ABoR)",
+  "fuente_url": "https://www.unlockmls.com/news/september-2026-central-texas-housing-report",
+  "indicadores": [
+    {
+      "etiqueta": "Precio medio de venta",
+      "valor": "$421,000",
+      "variacion": "+1.4% interanual",
+      "tendencia": "up"
+    },
+    {
+      "etiqueta": "Ventas cerradas",
+      "valor": "2,223",
+      "variacion": "−14.8% interanual",
+      "tendencia": "down"
+    },
+    {
+      "etiqueta": "Ventas pendientes",
+      "valor": "2,313",
+      "variacion": "−1.8% interanual",
+      "tendencia": "down"
+    }
+  ]
+}
