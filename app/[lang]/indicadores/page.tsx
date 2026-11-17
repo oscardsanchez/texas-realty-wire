@@ -1,28 +1,38 @@
 import type { Metadata } from "next";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { getIndicadoresHistorial } from "@/lib/indicadores";
+import { getIndicadoresHistorial, localizeSnapshot } from "@/lib/indicadores";
+import { getSeccion } from "@/lib/taxonomy-i18n";
+import { getDict } from "@/lib/i18n";
+import { parseLang } from "@/lib/lang-param";
+import { buildAlternates } from "@/lib/alternates";
 import { cn } from "@/lib/cn";
 
-export const metadata: Metadata = {
-  title: "Historial de indicadores",
-  description: "Todos los cortes mensuales de precio medio, inventario y días en mercado en Texas, para consulta y comparación.",
-};
+export function generateMetadata({ params }: { params: { lang: string } }): Metadata {
+  const lang = parseLang(params.lang);
+  const t = getDict(lang);
+  return {
+    title: t.indicatorsTitle,
+    description: t.indicatorsDescription,
+    alternates: buildAlternates(lang, "/indicadores"),
+  };
+}
 
-export default function IndicadoresHistorialPage() {
-  const historial = getIndicadoresHistorial();
+export default function IndicadoresHistorialPage({ params }: { params: { lang: string } }) {
+  const lang = parseLang(params.lang);
+  const t = getDict(lang);
+  const historial = getIndicadoresHistorial().map((snap) => localizeSnapshot(snap, lang));
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6">
-      <p className="eyebrow mb-2">Pulso del Mercado</p>
-      <h1 className="font-serif text-3xl font-bold text-ink">Historial de indicadores</h1>
+      <p className="eyebrow mb-2">{getSeccion(lang, "pulso-del-mercado")?.nombre}</p>
+      <h1 className="font-serif text-3xl font-bold text-ink">{t.indicatorsTitle}</h1>
       <p className="mt-2 max-w-2xl text-ink-soft">
-        Cada corte mensual queda archivado aquí — no se sobreescribe con la actualización
-        siguiente, para poder comparar periodo contra periodo.
+        {t.indicatorsIntro}
       </p>
 
       <div className="mt-8 space-y-6">
         {historial.length === 0 && (
-          <p className="text-ink-soft">Todavía no hay cortes archivados.</p>
+          <p className="text-ink-soft">{t.indicatorsEmpty}</p>
         )}
         {historial.map((snapshot, i) => (
           <div key={snapshot.periodoSlug} className="border border-line">
@@ -30,7 +40,7 @@ export default function IndicadoresHistorialPage() {
               <p className="font-serif font-semibold text-ink">{snapshot.periodo}</p>
               {i === 0 && (
                 <span className="rounded-sm bg-accent px-2 py-0.5 text-[10px] font-medium uppercase tracking-wide text-paper">
-                  Más reciente
+                  {t.mostRecent}
                 </span>
               )}
             </div>
@@ -62,7 +72,7 @@ export default function IndicadoresHistorialPage() {
                 rel="noopener noreferrer"
                 className="text-[11px] text-ink-soft/70 underline decoration-ink-soft/20 underline-offset-2 hover:text-accent"
               >
-                Fuente: {snapshot.fuente_nombre} →
+                {t.source}: {snapshot.fuente_nombre} →
               </a>
             </div>
           </div>

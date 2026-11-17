@@ -1,7 +1,17 @@
 import { cn } from "@/lib/cn";
 import { FUENTES } from "@/lib/taxonomy";
+import { getDict, type Lang } from "@/lib/i18n";
 
-export function FuenteBadge({ fuenteSlug, className }: { fuenteSlug: string; className?: string }) {
+export function FuenteBadge({
+  fuenteSlug,
+  className,
+  lang = "es",
+}: {
+  fuenteSlug: string;
+  className?: string;
+  lang?: Lang;
+}) {
+  const t = getDict(lang);
   const fuente = FUENTES[fuenteSlug];
   if (!fuente) return null;
 
@@ -16,7 +26,7 @@ export function FuenteBadge({ fuenteSlug, className }: { fuenteSlug: string; cla
           : "border-navy/20 bg-navy/[0.04] text-navy-soft",
         className
       )}
-      title={esPrimaria ? "Dato primario" : "Cobertura periodística"}
+      title={esPrimaria ? t.primaryData : t.newsCoverage}
     >
       <span
         className={cn("h-1.5 w-1.5 rounded-full", esPrimaria ? "bg-primaria" : "bg-navy-soft")}

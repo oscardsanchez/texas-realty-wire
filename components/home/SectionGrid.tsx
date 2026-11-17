@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { SECCION_LIST } from "@/lib/taxonomy";
+import { getSeccionList } from "@/lib/taxonomy-i18n";
+import { withLang, type Lang } from "@/lib/i18n";
 
-export function SectionGrid() {
+export function SectionGrid({ lang }: { lang: Lang }) {
   return (
     <div className="grid gap-px overflow-hidden border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
-      {SECCION_LIST.map((seccion) => (
+      {getSeccionList(lang).map((seccion) => (
         <Link
           key={seccion.slug}
-          href={`/seccion/${seccion.slug}`}
+          href={withLang(lang, `/seccion/${seccion.slug}`)}
           className="group flex flex-col justify-between bg-paper p-5 transition-colors hover:bg-paper-dim"
         >
           <div>

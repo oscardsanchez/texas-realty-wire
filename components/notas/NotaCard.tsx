@@ -1,16 +1,27 @@
 import Link from "next/link";
 import { NotaMeta } from "@/lib/mdx";
-import { CIUDADES, SECCIONES } from "@/lib/taxonomy";
+import { getCiudadNombre, getSeccion } from "@/lib/taxonomy-i18n";
+import { getDict, withLang, type Lang } from "@/lib/i18n";
 import { FuenteBadge } from "@/components/ui/FuenteBadge";
 import { formatFecha } from "@/lib/format";
 import { cn } from "@/lib/cn";
 
-export function NotaCard({ nota, destacada = false }: { nota: NotaMeta; destacada?: boolean }) {
-  const seccion = SECCIONES[nota.seccion];
+export function NotaCard({
+  nota,
+  lang,
+  destacada = false,
+}: {
+  nota: NotaMeta;
+  lang: Lang;
+  destacada?: boolean;
+}) {
+  const t = getDict(lang);
+  const seccion = getSeccion(lang, nota.seccion);
+  const soloEs = lang === "en" && nota.contentLang === "es";
 
   return (
     <Link
-      href={`/notas/${nota.slug}`}
+      href={withLang(lang, `/notas/${nota.slug}`)}
       className={cn(
         "group flex flex-col border-b border-line pb-6",
         destacada && "border-b-0 pb-0"
@@ -20,7 +31,7 @@ export function NotaCard({ nota, destacada = false }: { nota: NotaMeta; destacad
         <span className="eyebrow">{seccion?.nombre ?? nota.seccion}</span>
         <span className="text-line">·</span>
         <span className="font-mono text-[11px] text-ink-soft/70">
-          {CIUDADES[nota.ciudad] ?? nota.ciudad}
+          {getCiudadNombre(lang, nota.ciudad) ?? nota.ciudad}
         </span>
       </div>
       <h3
@@ -35,10 +46,18 @@ export function NotaCard({ nota, destacada = false }: { nota: NotaMeta; destacad
         {nota.resumen}
       </p>
       <div className="mt-3 flex flex-wrap items-center gap-2">
-        <FuenteBadge fuenteSlug={nota.fuente_principal} />
+        <FuenteBadge fuenteSlug={nota.fuente_principal} lang={lang} />
         <span className="text-xs text-ink-soft/60">
-          {formatFecha(nota.fecha_publicacion)} · {nota.readingMinutes} min de lectura
+          {formatFecha(nota.fecha_publicacion, lang)} · {nota.readingMinutes} {t.minRead}
         </span>
+        {soloEs && (
+          <span
+            className="rounded-sm border border-line px-1.5 py-0.5 font-mono text-[10px] font-semibold text-ink-soft/70"
+            title={t.spanishOnlyNotice}
+          >
+            {t.spanishOnlyTag}
+          </span>
+        )}
       </div>
     </Link>
   );

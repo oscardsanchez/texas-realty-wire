@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import type { Lang } from "./i18n";
 
 const INDICADORES_DIR = path.join(process.cwd(), "data", "indicadores");
 
@@ -10,6 +11,13 @@ export interface Indicador {
   tendencia: "up" | "down";
 }
 
+/** Traducción opcional de un snapshot (bloque `en` dentro del JSON). Sin `en`, se muestra en español. */
+export interface IndicadoresSnapshotEn {
+  periodo: string;
+  fuente_nombre?: string;
+  indicadores: Pick<Indicador, "etiqueta" | "valor" | "variacion">[];
+}
+
 export interface IndicadoresSnapshot {
   periodoSlug: string; // YYYY-MM, derivado del nombre de archivo
   periodo: string;
@@ -17,6 +25,18 @@ export interface IndicadoresSnapshot {
   fuente_nombre: string;
   fuente_url: string;
   indicadores: Indicador[];
+  en?: IndicadoresSnapshotEn;
+}
+
+/** Devuelve el snapshot en el idioma pedido; si no tiene traducción, el original en español. */
+export function localizeSnapshot(s: IndicadoresSnapshot, lang: Lang): IndicadoresSnapshot {
+  if (lang !== "en" || !s.en) return s;
+  return {
+    ...s,
+    periodo: s.en.periodo,
+    fuente_nombre: s.en.fuente_nombre ?? s.fuente_nombre,
+    indicadores: s.indicadores.map((ind, i) => ({ ...ind, ...(s.en!.indicadores[i] ?? {}) })),
+  };
 }
 
 export function getIndicadoresHistorial(): IndicadoresSnapshot[] {
