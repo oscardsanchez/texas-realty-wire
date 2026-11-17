@@ -114,7 +114,10 @@ generar estos archivos, pero siempre como borrador en `data/indicadores-borrador
 ## 5. Actualización automática y flujo de revisión
 
 Tres rutinas programadas (agentes en la nube, ver `https://claude.ai/code/routines`)
-investigan las fuentes autorizadas y generan **borradores** — nunca publican directo:
+investigan las fuentes autorizadas. Las rutinas **mensual y trimestral** generan
+**borradores** (nunca publican directo). La rutina **semanal** también genera borradores,
+y una segunda rutina de revisión los publica solos los lunes (ver "Publicación automática
+semanal" más abajo):
 
 | Rutina | Cadencia | Fuentes que revisa |
 |---|---|---|
@@ -132,7 +135,30 @@ suburbio va en el título/cuerpo de la nota, como en la nota de Texas City/Galve
 Las notas y snapshots de indicadores previos a este cambio (de otras ciudades o estatales)
 se quedan publicados tal cual — no se borran ni se re-etiquetan.
 
-Cada corrida que encuentra algo nuevo y citable:
+### Publicación automática semanal (lunes)
+
+Dos rutinas en cadena, para que quien revisa no sea quien redactó:
+1. **9:00 am (hora de Chicago)** — "Rastreo semanal": investiga y deja los borradores en un
+   PR `borrador/semanal-<fecha>` (no publica).
+2. **10:25 am** — "Publicación semanal": revisa de forma independiente cada borrador de ese PR
+   y publica solo los que cumplen todos estos controles; el resto queda como borrador, con
+   un comentario en el PR que explica por qué:
+   - **Corroboración**: cada cifra clave confirmada por al menos 2 fuentes independientes
+     (o por lectura directa del artículo original). Sin contradicciones entre fuentes.
+   - **Plantilla y taxonomía**: frontmatter completo con slugs válidos de `lib/taxonomy.ts`,
+     `ciudad: "austin"`, `fuente_url` apuntando al artículo específico.
+   - **Verificaciones técnicas**: `npx tsc --noEmit` y `npx next lint` sin errores, y el build
+     de Preview de Vercel en `success`.
+   Luego mueve la nota a `content/notas/` en una rama `publicar/semanal-<fecha>`, fusiona a
+   `main` y confirma que el despliegue de producción terminó en `success`.
+
+Máximo 2 notas por semana. Si no hay historias nuevas de Austin, no se publica nada. Para
+despublicar una nota: borra su `.mdx` de `content/notas/` y haz commit. Esta cadena nunca
+toca `data/indicadores/` ni `data/indicadores-borrador/`.
+
+Las rutinas mensual y trimestral siguen el flujo de borradores descrito a continuación.
+
+Cada corrida (mensual/trimestral) que encuentra algo nuevo y citable:
 1. Escribe la(s) nota(s) en `content/borradores/` (y, si aplica, un snapshot en
    `data/indicadores-borrador/`) siguiendo la misma plantilla y reglas de citación de la
    sección 2 — nunca toca `content/notas/` ni `data/indicadores/` directamente.
