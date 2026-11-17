@@ -149,7 +149,8 @@ Dos rutinas en cadena, para que quien revisa no sea quien redactó:
      `ciudad: "austin"`, `fuente_url` apuntando al artículo específico.
    - **Verificaciones técnicas**: `npx tsc --noEmit` y `npx next lint` sin errores, y el build
      de Preview de Vercel en `success`.
-   Luego mueve la nota a `content/notas/` en una rama `publicar/semanal-<fecha>`, fusiona a
+   Luego mueve la nota a `content/notas/` en una rama `publicar/semanal-<fecha>`, **agrega su
+   traducción al inglés en `content/notas-en/<mismo-slug>.mdx`** (ver sección 8), fusiona a
    `main` y confirma que el despliegue de producción terminó en `success`.
 
 Máximo 2 notas por semana. Si no hay historias nuevas de Austin, no se publica nada. Para
@@ -196,3 +197,26 @@ Si un borrador no sirve, simplemente cierra el PR sin mergear (o bórralo).
 En Vercel, con el repo de GitHub (`oscardsanchez/texas-realty-wire`) conectado — cada push
 a `main` despliega automáticamente. Sin variables de entorno requeridas (no hay
 integraciones externas todavía).
+
+## 8. Idiomas (inglés / español)
+
+El sitio es bilingüe. Las URLs llevan prefijo de idioma (`/en/...`, `/es/...`).
+
+- **Idioma por defecto**: el middleware (`middleware.ts`) lee el idioma del navegador o
+  dispositivo (`Accept-Language`): español → `/es`, cualquier otro → `/en`.
+- **Botón EN | ES** (encabezado): cambia al otro idioma en la misma página, conserva los
+  filtros y guarda la elección en la cookie `lang`, que gana sobre el idioma del dispositivo
+  en las siguientes visitas.
+- **Notas**: el español es la fuente de verdad (`content/notas/<slug>.mdx`). La traducción al
+  inglés vive en `content/notas-en/<mismo-slug>.mdx` y solo necesita `title` y `resumen` en
+  el frontmatter; sección, ciudad, fuente y fecha se heredan del archivo en español.
+  Mantén idénticas todas las cifras, nombres propios y citas.
+- **Notas sin traducción** (las anteriores a noviembre de 2026): en `/en` se muestran en
+  español con un aviso, etiqueta `ES` en las tarjetas y `canonical` a la versión en español.
+- **Interfaz**: los textos fijos están en `lib/i18n.ts` (diccionario EN/ES) y los nombres de
+  secciones y ciudades en `lib/taxonomy-i18n.ts`. Los slugs canónicos siguen en
+  `lib/taxonomy.ts`.
+- **Indicadores**: un snapshot de `data/indicadores/` puede traer un bloque `en` con la
+  traducción de `periodo`, `etiqueta`, `valor` y `variacion`; sin él, se muestra en español.
+- **SEO**: cada página lleva `canonical` y `hreflang` (en, es, x-default); el sitemap incluye
+  ambos idiomas.

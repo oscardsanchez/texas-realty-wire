@@ -1,18 +1,21 @@
 import Link from "next/link";
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
-import { getIndicadoresActuales } from "@/lib/indicadores";
+import { getIndicadoresActuales, localizeSnapshot } from "@/lib/indicadores";
+import { getDict, withLang, type Lang } from "@/lib/i18n";
 import { cn } from "@/lib/cn";
 
-export function MarketIndicatorsWidget() {
-  const snapshot = getIndicadoresActuales();
-  if (!snapshot) return null;
+export function MarketIndicatorsWidget({ lang }: { lang: Lang }) {
+  const t = getDict(lang);
+  const actual = getIndicadoresActuales();
+  if (!actual) return null;
+  const snapshot = localizeSnapshot(actual, lang);
 
   const { periodo, fuente_nombre, fuente_url, indicadores } = snapshot;
 
   return (
     <aside className="border border-navy/15 bg-paper-dim/60">
       <div className="border-b border-navy/15 bg-navy px-4 py-3">
-        <p className="eyebrow text-accent-soft">Indicadores de mercado</p>
+        <p className="eyebrow text-accent-soft">{t.widgetTitle}</p>
         <p className="mt-0.5 text-xs text-paper/60">{periodo}</p>
       </div>
       <dl className="divide-y divide-navy/10">
@@ -45,13 +48,13 @@ export function MarketIndicatorsWidget() {
           rel="noopener noreferrer"
           className="text-[11px] text-ink-soft/70 underline decoration-ink-soft/20 underline-offset-2 hover:text-accent"
         >
-          Fuente: {fuente_nombre} →
+          {t.source}: {fuente_nombre} →
         </a>
         <Link
-          href="/indicadores"
+          href={withLang(lang, "/indicadores")}
           className="text-[11px] font-medium text-accent underline decoration-accent/30 underline-offset-2 hover:decoration-accent"
         >
-          Historial
+          {t.widgetHistory}
         </Link>
       </div>
     </aside>
