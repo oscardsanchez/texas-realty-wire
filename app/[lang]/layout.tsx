@@ -47,6 +47,10 @@ export function generateMetadata({ params }: { params: { lang: string } }): Meta
       locale: t.ogLocale,
       siteName: "Texas Realty Wire",
     },
+    // El sitio ya ofrece ambos idiomas con el botón EN | ES: se desactiva la traducción
+    // automática del navegador para que no revierta el idioma elegido ni traduzca el nombre
+    // de la marca o los nombres propios.
+    other: { google: "notranslate" },
   };
 }
 
@@ -60,7 +64,7 @@ export default function RootLayout({
   const lang = parseLang(params.lang);
 
   return (
-    <html lang={lang} className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
+    <html lang={lang} translate="no" className={`${serif.variable} ${sans.variable} ${mono.variable}`}>
       <body className="flex min-h-screen flex-col">
         <Header lang={lang} />
         <main className="flex-1">{children}</main>
