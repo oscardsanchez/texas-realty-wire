@@ -114,7 +114,9 @@ generar estos archivos, pero siempre como borrador en `data/indicadores-borrador
 ## 5. Actualización automática y flujo de revisión
 
 Tres rutinas programadas (agentes en la nube, ver `https://claude.ai/code/routines`)
-investigan las fuentes autorizadas y generan **borradores** — nunca publican directo:
+investigan las fuentes autorizadas. Las rutinas **mensual y trimestral** generan
+**borradores** (nunca publican directo). La rutina **semanal** publica sola los lunes
+(ver "Publicación automática de la rutina semanal" más abajo):
 
 | Rutina | Cadencia | Fuentes que revisa |
 |---|---|---|
@@ -132,7 +134,26 @@ suburbio va en el título/cuerpo de la nota, como en la nota de Texas City/Galve
 Las notas y snapshots de indicadores previos a este cambio (de otras ciudades o estatales)
 se quedan publicados tal cual — no se borran ni se re-etiquetan.
 
-Cada corrida que encuentra algo nuevo y citable:
+### Publicación automática de la rutina semanal (lunes, 9:00 am hora de Chicago)
+
+La rutina semanal publica sola las notas que cumplen todos estos controles; las que no los
+cumplen quedan como borrador en un PR abierto para revisión humana:
+1. **Corroboración**: cada cifra clave debe estar confirmada por al menos 2 fuentes
+   independientes (o por la fuente original leída directamente). Si una cifra proviene de un
+   único snippet, la nota no se publica sola.
+2. **Plantilla y taxonomía**: frontmatter completo con slugs válidos de `lib/taxonomy.ts`,
+   `ciudad: "austin"`, `fuente_url` apuntando al artículo específico.
+3. **Verificaciones técnicas**: `npx tsc --noEmit` y `npx next lint` sin errores, y el build
+   de Preview de Vercel del PR en estado `success`.
+4. Solo entonces escribe la nota en `content/notas/` (rama `publicar/semanal-<fecha>`),
+   hace merge del PR a `main` y confirma que el despliegue de producción terminó en `success`.
+
+Máximo 2 notas por corrida. Si no hay historias nuevas de Austin con suficiente sustancia,
+no hace cambios. Para despublicar una nota: borra su `.mdx` de `content/notas/` y haz commit.
+
+Las rutinas mensual y trimestral siguen el flujo de borradores descrito a continuación.
+
+Cada corrida (mensual/trimestral) que encuentra algo nuevo y citable:
 1. Escribe la(s) nota(s) en `content/borradores/` (y, si aplica, un snapshot en
    `data/indicadores-borrador/`) siguiendo la misma plantilla y reglas de citación de la
    sección 2 — nunca toca `content/notas/` ni `data/indicadores/` directamente.
